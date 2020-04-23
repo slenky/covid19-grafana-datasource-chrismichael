@@ -1,13 +1,11 @@
-from datetime import datetime
-from functools import partial, reduce
-from time import mktime
+from functools import reduce
 import json
-from operator import concat, is_not
+from operator import concat
 import os
+import locale
 import requests
 import requests_cache
 import objectpath
-import logging
 
 class Covid19:
     requests_cache.install_cache('data_cache', backend='sqlite', expire_after=360)
@@ -44,10 +42,6 @@ class Covid19:
     def timeseries(self, target):
         country, group = target.split(":")
         country_index = next((index for (index, d) in enumerate(self.data) if d["Country"] == country), None)
-        logging.info(country_index)
-        logging.info(self.data[country_index])
-        series = list(
-            self.data[country_index][group]
-        )
-
-        return list(filter(partial(is_not, None), series))
+        locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
+        series = locale.atoi(self.data[country_index][group])
+        return series
