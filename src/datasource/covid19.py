@@ -5,47 +5,40 @@ import json
 from operator import concat, is_not
 import os
 import requests
+import objectpath
 
 class Covid19:
 
-    DATA_URL = "https://pomber.github.io/covid19/timeseries.json"
+    DATA_URL = "https://covid19-server.chrismichael.now.sh/api/v1/AllReports"
 
     def __init__(self):
         if "ENVIRONMENT" in os.environ and os.environ["ENVIRONMENT"] == 'test':
-            with open('src/example-data/timeseries.min.json', 'rb') as file:
+            with open('src/example-data/allreports.min.json', 'rb') as file:
                 self.data = json.load(file)
         else:
             response = requests.get(self.DATA_URL)
-            self.data = response.json()
+            all_data = response.json()
+            self.data = all_data["reports"][0]["table"][0]
 
     def countries(self):
-        return sorted(self.data.keys())
+        table = objectpath.Tree(self.data)
+        return sorted(tuple(table.execute('$.Country')))
 
     def metrics(self):
         metrics = list(map(lambda country: [
-            country + ":confirmed",
-            country + ":deaths",
-            country + ":recovered"
+            country + ":TotalCases",
+            country + ":NewCases",
+            country + ":TotalDeaths",
+            country + ":NewDeaths",
+            country + ":TotalRecovered", 
+            country + ":ActiveCases",
+            country + ":TotalTests",
+            country + ":Deaths_1M_pop",
+            country + ":Tests_1M_Pop",
+            country + ":TotCases_1M_Pop"
         ], self.countries()))
         return reduce(concat, metrics)
 
-    # Timeseries Response
-    # [
-    #   {
-    #     "target":"upper_75", // The field being queried for
-    #     "datapoints":[
-    #       [622,1450754160000],  // Metric value as a float , unixtimestamp in milliseconds
-    #       [365,1450754220000]
-    #     ]
-    #   },
-    #   {
-    #     "target":"upper_90",
-    #     "datapoints":[
-    #       [861,1450754160000],
-    #       [767,1450754220000]
-    #     ]
-    #   }
-    # ]
     def timeseries(self, target, from_date, to_date):
         country, group = target.split(":")
         country_data = self.data[country]
