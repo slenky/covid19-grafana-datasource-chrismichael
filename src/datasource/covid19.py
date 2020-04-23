@@ -39,31 +39,11 @@ class Covid19:
         ], self.countries()))
         return reduce(concat, metrics)
 
-    def timeseries(self, target, from_date, to_date):
+    def timeseries(self, target):
         country, group = target.split(":")
-        country_data = self.data[country]
-        from_date_dt, to_date_dt = self.convert_input_dates(from_date, to_date)
+        country_data = [b for b in self.data if b[0] == country]
         series = list(map(
-            lambda datapoint: self.filter_datapoint(datapoint, group, from_date_dt, to_date_dt), country_data
+            country_data[group]
         ))
 
         return list(filter(partial(is_not, None), series))
-
-    @staticmethod
-    def filter_datapoint(datapoint, group, from_date_dt, to_date_dt):
-        datapoint_dt = mktime(datetime.strptime(datapoint["date"], "%Y-%m-%d").timetuple())
-        if from_date_dt <= datapoint_dt <= to_date_dt:
-            try:
-                return [float(datapoint[group]), int(datapoint_dt * 1000)]
-            except (KeyError, TypeError):
-                return [0, int(datapoint_dt * 1000)]
-        else:
-            return None
-
-    @staticmethod
-    def convert_input_dates(from_date, to_date):
-        date_format = '%Y-%m-%dT%H:%M:%S.%fZ'
-        return [
-            mktime(datetime.strptime(from_date, date_format).timetuple()),
-            mktime(datetime.strptime(to_date, date_format).timetuple())
-        ]

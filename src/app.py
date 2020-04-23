@@ -19,12 +19,10 @@ def search():
 def query():
     covid19 = Covid19()
     series = []
-    from_date = request.json["range"]["from"]
-    to_date = request.json["range"]["to"]
     for target in request.json["targets"]:
         series.append({
             "target": target["target"],
-            "datapoints": covid19.timeseries(target["target"], from_date, to_date)
+            "datapoints": covid19.timeseries(target["target"])
         })
     return jsonify(series)
 
