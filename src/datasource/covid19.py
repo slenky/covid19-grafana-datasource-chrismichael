@@ -1,4 +1,5 @@
 from functools import reduce
+import time
 import json
 from operator import concat
 import os
@@ -43,5 +44,5 @@ class Covid19:
         country, group = target.split(":")
         country_index = next((index for (index, d) in enumerate(self.data) if d["Country"] == country), None)
         locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
-        series = locale.atoi(self.data[country_index][group])
+        series = [[locale.atoi(self.data[country_index][group]), int(time.time())]]
         return series
