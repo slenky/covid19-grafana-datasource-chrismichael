@@ -30,7 +30,7 @@ class Covid19:
             country + ":NewCases",
             country + ":TotalDeaths",
             country + ":NewDeaths",
-            country + ":TotalRecovered", 
+            country + ":TotalRecovered",
             country + ":ActiveCases",
             country + ":TotalTests",
             country + ":Deaths_1M_pop",
