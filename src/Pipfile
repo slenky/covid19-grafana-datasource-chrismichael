@@ -11,6 +11,7 @@ expects = "*"
 flask = "*"
 requests = "*"
 gunicorn = "*"
+objectpath = "*"
 
 [requires]
 python_version = "3.7"
