@@ -42,11 +42,11 @@ class Covid19:
 
     def timeseries(self, target):
         country, group = target.split(":")
-        logging.info(target)
-        logging.info(self.data)
-        country_data = [b for b in self.data if b[0] == country]
-        series = list(map(
-            country_data[group]
-        ))
+        country_index = next((index for (index, d) in enumerate(self.data) if d["Country"] == country), None)
+        logging.info(country_index)
+        logging.info(self.data[country_index])
+        series = list(
+            self.data[country_index][group]
+        )
 
         return list(filter(partial(is_not, None), series))
