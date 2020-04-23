@@ -6,6 +6,7 @@ from operator import concat, is_not
 import os
 import requests
 import objectpath
+import logging
 
 class Covid19:
 
@@ -41,6 +42,8 @@ class Covid19:
 
     def timeseries(self, target):
         country, group = target.split(":")
+        logging.info(target)
+        logging.info(self.data)
         country_data = [b for b in self.data if b[0] == country]
         series = list(map(
             country_data[group]
