@@ -5,11 +5,12 @@ import json
 from operator import concat, is_not
 import os
 import requests
+import requests_cache
 import objectpath
 import logging
 
 class Covid19:
-
+    requests_cache.install_cache('data_cache', backend='sqlite', expire_after=360)
     DATA_URL = "https://covid19-server.chrismichael.now.sh/api/v1/AllReports"
 
     def __init__(self):
