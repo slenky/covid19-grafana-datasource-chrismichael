@@ -10,7 +10,7 @@ import objectpath
 
 class Covid19:
     requests_cache.install_cache('data_cache', backend='sqlite', expire_after=360)
-    DATA_URL = "https://covid19-server.chrismichael.now.sh/api/v1/AllReports"
+    DATA_URL = "https://www.ncovid19.it/api/v1/AllReports.php"
 
     def __init__(self):
         if "ENVIRONMENT" in os.environ and os.environ["ENVIRONMENT"] == 'test':
