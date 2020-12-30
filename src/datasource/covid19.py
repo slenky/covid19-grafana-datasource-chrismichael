@@ -35,8 +35,8 @@ class Covid19:
             country + ":ActiveCases",
             country + ":TotalTests",
             country + ":Deaths_1M_pop",
-            country + ":Tests_1M_Pop",
-            country + ":TotCases_1M_Pop"
+            country + ":Tests_1M_pop",
+            country + ":TotCases_1M_pop"
         ], self.countries()))
         return reduce(concat, metrics)
 
